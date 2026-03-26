@@ -15,6 +15,12 @@ pipeline {
 
     stages {
 
+        stage('Checkout from GitHub') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Copy Script to Cloudera') {
             steps {
                 sh '''
