@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
     parameters {
         choice(name: 'JOB_TYPE', choices: ['pi_estimation', 'word_count'], description: 'Spark job to run on Cloudera')
         string(name: 'NUM_EXECUTORS',   defaultValue: '2',    description: 'Number of YARN executors')
