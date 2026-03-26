@@ -41,7 +41,6 @@ pipeline {
                 sh '''
                     echo "=== Submitting ${JOB_TYPE} to YARN on Cloudera master ==="
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${CLOUDERA_HOST} "
-                        sudo cp /tmp/transformation.py ${SPARK_SCRIPTS}/transformation.py
                         export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
                         export HADOOP_CONF_DIR=/etc/hadoop/conf
                         export SPARK_CONF_DIR=/etc/spark/conf
@@ -55,7 +54,7 @@ pipeline {
                           --executor-memory ${EXECUTOR_MEMORY} \
                           --driver-memory 512m \
                           --conf spark.pyspark.python=/usr/bin/python3 \
-                          ${SPARK_SCRIPTS}/transformation.py
+                          /tmp/transformation.py
                     "
                 '''
             }
