@@ -28,10 +28,10 @@ pipeline {
         stage('Copy Script to Cloudera') {
             steps {
                 sh '''
-                    echo "=== Copying transformation.py to Cloudera master ==="
+                    echo "=== Copying transformation.py to /tmp on Cloudera master ==="
                     scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
                         src/transformation.py \
-                        ${CLOUDERA_HOST}:${SPARK_SCRIPTS}/transformation.py
+                        ${CLOUDERA_HOST}:/tmp/transformation.py
                 '''
             }
         }
@@ -41,6 +41,7 @@ pipeline {
                 sh '''
                     echo "=== Submitting ${JOB_TYPE} to YARN on Cloudera master ==="
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${CLOUDERA_HOST} "
+                        sudo cp /tmp/transformation.py ${SPARK_SCRIPTS}/transformation.py
                         export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
                         export HADOOP_CONF_DIR=/etc/hadoop/conf
                         export SPARK_CONF_DIR=/etc/spark/conf
