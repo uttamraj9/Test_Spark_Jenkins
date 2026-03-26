@@ -14,7 +14,17 @@ pipeline {
     }
 
     stages {
-        
+
+        stage('Copy Script to Cloudera') {
+            steps {
+                sh '''
+                    echo "=== Copying transformation.py to Cloudera master ==="
+                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no \
+                        src/transformation.py \
+                        ${CLOUDERA_HOST}:${SPARK_SCRIPTS}/transformation.py
+                '''
+            }
+        }
 
         stage('Submit Spark Job') {
             steps {
@@ -34,7 +44,7 @@ pipeline {
                           --executor-memory ${EXECUTOR_MEMORY} \
                           --driver-memory 512m \
                           --conf spark.pyspark.python=/usr/bin/python3 \
-                          ${SPARK_SCRIPTS}/${JOB_TYPE}.py
+                          ${SPARK_SCRIPTS}/transformation.py
                     "
                 '''
             }
